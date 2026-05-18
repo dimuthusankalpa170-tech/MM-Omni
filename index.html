@@ -3,152 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MM Omni Hub | Live Professional Directory</title>
+    <title>MM OMNI | Service Directory</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
-        :root { --primary: #007bff; --dark: #0b111a; --glass: rgba(255,255,255,0.05); --success: #28a745; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; scroll-behavior: smooth; }
-        body { background: var(--dark); color: white; }
-        
-        header { padding: 20px 50px; background: rgba(0,0,0,0.85); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--glass); }
-        .logo h2 span { color: var(--primary); }
-        
-        .hero { padding: 60px 20px; text-align: center; background: linear-gradient(to bottom, rgba(0,123,255,0.05), transparent); }
-        .hero h1 { font-size: 2.2rem; margin-bottom: 10px; }
-        
-        .directory-section { padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        
-        .card { background: #16202c; padding: 25px; border-radius: 20px; border: 1px solid var(--glass); transition: 0.3s; }
-        .card:hover { border-color: var(--primary); transform: translateY(-5px); }
-        
-        .status-tag { color: var(--success); font-size: 0.7rem; font-weight: bold; text-transform: uppercase; }
-        .map-link { display: inline-block; margin-top: 10px; color: #ffc107; text-decoration: none; font-size: 0.85rem; border: 1px solid #ffc107; padding: 6px 12px; border-radius: 6px; }
-        
-        .call-btn { display: block; background: var(--success); color: white; text-align: center; padding: 14px; border-radius: 12px; text-decoration: none; margin-top: 20px; font-weight: bold; font-size: 1rem; }
-        
-        .register-section { padding: 80px 20px; background: #121923; }
-        .form-box { max-width: 500px; margin: 0 auto; background: var(--dark); padding: 40px; border-radius: 24px; border: 1px solid var(--glass); }
-        
-        input, select { width: 100%; padding: 14px; margin-bottom: 20px; background: #1a222c; border: 1px solid #333; color: white; border-radius: 10px; font-size: 1rem; }
-        .submit-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 1.1rem; }
-        
-        footer { text-align: center; padding: 40px; color: #444; font-size: 0.8rem; }
+        :root { --primary: #007bff; --dark: #0b111a; --success: #28a745; }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        header { padding: 20px; background: #000; text-align: center; border-bottom: 1px solid #333; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #16202c; padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.3s; }
+        .btn { display: block; background: var(--success); color: white; padding: 12px; border-radius: 10px; text-decoration: none; margin-top: 15px; font-weight: bold; text-align: center; }
+        .reg-box { max-width: 450px; margin: 40px auto; background: #16202c; padding: 30px; border-radius: 20px; border: 1px solid #333; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; background: #0b111a; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
+        .sub-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
+    <header><h1>MM <span>OMNI</span></h1></header>
+    
+    <div id="techGrid" class="grid">Scanning database for specialists...</div>
 
-<header>
-    <div class="logo"><h2>MM <span>OMNI</span></h2></div>
-    <nav><a href="login.html" style="color: white; text-decoration: none; font-weight: 600;">PORTAL HOME</a></nav>
-</header>
-
-<section class="hero" id="technicians">
-    <h1>Professional Directory</h1>
-    <p style="color: #888;">Instant Access to Verified Specialists</p>
-</section>
-
-<div class="directory-section">
-    <div class="grid" id="techGrid">Loading specialists...</div>
-</div>
-
-<section class="register-section" id="register">
-    <div class="form-box">
-        <h2 style="text-align: center; margin-bottom: 30px;">Technician Registration</h2>
+    <div class="reg-box">
+        <h2 style="text-align: center;">Register Profile</h2>
         <form id="regForm">
-            <input type="text" id="name" placeholder="Full Name" required>
-            <input type="tel" id="phone" placeholder="Mobile Number (e.g. 07XXXXXXXX)" required>
-            <select id="category" required>
-                <option value="" disabled selected>Select Category</option>
+            <input type="text" id="name" placeholder="Your Name" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <select id="cat" required>
                 <option value="Automobile">Automobile</option>
                 <option value="Electrical">Electrical</option>
                 <option value="AC Repair">AC Repair</option>
                 <option value="Plumbing">Plumbing</option>
-                <option value="ICT/Network">ICT/Network</option>
+                <option value="ICT Support">ICT Support</option>
             </select>
-            <p style="font-size: 0.75rem; color: #888; margin-bottom: 20px; text-align: center;">
-                GPS location will be captured to help customers find you.
-            </p>
-            <button type="submit" class="submit-btn" id="subBtn">REGISTER PROFILE</button>
+            <button type="submit" class="submit-btn" id="subBtn">REGISTER & ACTIVATE GPS</button>
         </form>
     </div>
-</section>
 
-<footer>Managed by Dimuthu Sankalpa | &copy; 2026</footer>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where, onSnapshot, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        const firebaseConfig = { 
+            apiKey: "AIzaSyA-Eef_FA_BSS8sUmnudVfNjDEH7a7M20s", 
+            authDomain: "mm-omni-b490e.firebaseapp.com", 
+            projectId: "mm-omni-b490e", 
+            storageBucket: "mm-omni-b490e.firebasestorage.app", 
+            messagingSenderId: "905893432675", 
+            appId: "1:905893432675:web:0150edbfc62f3ec5849756" 
+        };
 
-    // Your Config
-    const firebaseConfig = {
-        apiKey: "AIzaSyA-Eef_FA_BSS8sUmnudVfNjDEH7a7M20s",
-        authDomain: "mm-omni-b490e.firebaseapp.com",
-        projectId: "mm-omni-b490e",
-        storageBucket: "mm-omni-b490e.firebasestorage.app",
-        messagingSenderId: "905893432675",
-        appId: "1:905893432675:web:0150edbfc62f3ec5849756"
-    };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        // SAVE DATA
+        document.getElementById('regForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const b = document.getElementById('subBtn');
+            b.innerText = "Capturing GPS..."; b.disabled = true;
 
-    // Save with GPS
-    document.getElementById('regForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const btn = document.getElementById('subBtn');
-        const phone = document.getElementById('phone').value.trim();
-        btn.innerText = "Accessing GPS...";
-        btn.disabled = true;
-
-        navigator.geolocation.getCurrentPosition(async (position) => {
-            try {
-                const q = query(collection(db, "technicians"), where("phone", "==", phone));
-                const snap = await getDocs(q);
-
-                if (!snap.empty) {
-                    alert("This phone number is already registered.");
-                } else {
+            navigator.geolocation.getCurrentPosition(async (p) => {
+                try {
                     await addDoc(collection(db, "technicians"), {
                         name: document.getElementById('name').value,
-                        phone: phone,
-                        category: document.getElementById('category').value,
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude,
-                        timestamp: new Date()
+                        phone: document.getElementById('phone').value,
+                        category: document.getElementById('cat').value,
+                        lat: p.coords.latitude,
+                        lng: p.coords.longitude,
+                        time: new Date()
                     });
-                    alert("Registration Successful!");
-                    e.target.reset();
-                }
-            } catch (err) { alert("Permission Error: Please check Firebase Rules."); }
-            btn.innerText = "REGISTER PROFILE";
-            btn.disabled = false;
-        }, (err) => {
-            alert("Please enable GPS to register.");
-            btn.disabled = false;
+                    alert("Profile Activated!"); e.target.reset();
+                } catch (err) { alert("Error: " + err.message); }
+                b.innerText = "REGISTER & ACTIVATE GPS"; b.disabled = false;
+            }, () => { alert("Please enable GPS Access!"); b.disabled = false; });
         });
-    });
 
-    // Real-time Display
-    const qList = query(collection(db, "technicians"), orderBy("timestamp", "desc"));
-    onSnapshot(qList, (snap) => {
-        const grid = document.getElementById('techGrid');
-        if (snap.empty) {
-            grid.innerHTML = "<p>No specialists found.</p>";
-            return;
-        }
-        grid.innerHTML = snap.docs.map(doc => {
-            const t = doc.data();
-            const mapUrl = https://www.google.com/maps?q=${t.lat},${t.lng};
-            return `<div class="card">
-                <span class="status-tag">● Live Now</span>
-                <h3 style="margin-top:10px;">${t.name}</h3>
-                <p style="color: var(--primary); font-weight: bold;">${t.category}</p>
-                <a href="${mapUrl}" target="_blank" class="map-link"><i class="fas fa-map-marker-alt"></i> VIEW ON MAP</a>
-                <a href="tel:${t.phone}" class="call-btn"><i class="fas fa-phone-alt"></i> CONTACT NOW</a>
-            </div>`;
-        }).join('');
-    });
-</script>
+        // VIEW DATA
+        onSnapshot(query(collection(db, "technicians"), orderBy("time", "desc")), (snap) => {
+            const grid = document.getElementById('techGrid');
+            if(snap.empty) { grid.innerHTML = "<p style='text-align:center; width:100%;'>No specialists found. Register below!</p>"; return; }
+            grid.innerHTML = snap.docs.map(doc => {
+                const t = doc.data();
+                const mapUrl = `https://www.google.com/maps?q=${t.lat},${t.lng}`;
+                return `<div class="card">
+                    <span style="color:var(--success); font-size:0.7rem; font-weight:bold;">● ACTIVE NOW</span>
+                    <h3>${t.name}</h3>
+                    <p style="color:var(--primary); font-weight:bold;">${t.category}</p>
+                    <a href="${mapUrl}" target="_blank" style="color:#ffc107; font-size:0.8rem;">VIEW LOCATION</a>
+                    <a href="tel:${t.phone}" class="btn">CALL NOW</a>
+                </div>`;
+            }).join('');
+        });
+    </script>
 </body>
 </html>
