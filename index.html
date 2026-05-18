@@ -3,45 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MM OMNI | Service Directory</title>
+    <title>MM OMNI | Portal</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
         :root { --primary: #007bff; --dark: #0b111a; --success: #28a745; }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
-        header { padding: 20px; background: #000; text-align: center; border-bottom: 1px solid #333; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: #16202c; padding: 20px; border-radius: 15px; border: 1px solid #333; transition: 0.3s; }
-        .btn { display: block; background: var(--success); color: white; padding: 12px; border-radius: 10px; text-decoration: none; margin-top: 15px; font-weight: bold; text-align: center; }
-        .reg-box { max-width: 450px; margin: 40px auto; background: #16202c; padding: 30px; border-radius: 20px; border: 1px solid #333; }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        .container { max-width: 500px; margin: 50px auto; padding: 20px; }
+        .box { background: #16202c; padding: 30px; border-radius: 20px; border: 1px solid #333; margin-bottom: 20px; }
+        .btn { display: block; width: 100%; padding: 15px; background: var(--primary); color: white; text-decoration: none; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; margin-top: 10px; }
+        .sec-btn { background: #333; }
         input, select { width: 100%; padding: 12px; margin-bottom: 15px; background: #0b111a; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
-        .sub-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-    <header><h1>MM <span>OMNI</span></h1></header>
-    
-    <div id="techGrid" class="grid">Scanning database for specialists...</div>
 
-    <div class="reg-box">
-        <h2 style="text-align: center;">Register Profile</h2>
-        <form id="regForm">
-            <input type="text" id="name" placeholder="Your Name" required>
-            <input type="tel" id="phone" placeholder="Phone Number" required>
-            <select id="cat" required>
-                <option value="Automobile">Automobile</option>
-                <option value="Electrical">Electrical</option>
-                <option value="AC Repair">AC Repair</option>
-                <option value="Plumbing">Plumbing</option>
-                <option value="ICT Support">ICT Support</option>
-            </select>
-            <button type="submit" class="submit-btn" id="subBtn">REGISTER & ACTIVATE GPS</button>
-        </form>
+    <div class="container" id="loginBox">
+        <h1>MM <span>OMNI</span></h1>
+        <p style="color:#888;">Welcome to Professional Portal</p>
+        <div class="box">
+            <button class="btn" onclick="showRegister()">TECHNICIAN REGISTRATION</button>
+            <button class="btn sec-btn" onclick="window.location.reload()">REFRESH DIRECTORY</button>
+        </div>
+        <div id="techGrid">Loading database...</div>
+    </div>
+
+    <div class="container hidden" id="regBox">
+        <h2>Register Profile</h2>
+        <div class="box">
+            <form id="regForm">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="tel" id="phone" placeholder="Mobile Number" required>
+                <select id="cat" required>
+                    <option value="Automobile">Automobile</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="AC Repair">AC Repair</option>
+                    <option value="ICT Support">ICT Support</option>
+                </select>
+                <button type="submit" class="btn" id="subBtn">ACTIVATE WITH GPS</button>
+                <button type="button" class="btn sec-btn" onclick="showLogin()">BACK TO HOME</button>
+            </form>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+        // මෙතනට ඔයාගේ පින්තූරයේ තිබුණු Config එක හරියටම දාලා තියෙන්නේ
         const firebaseConfig = { 
             apiKey: "AIzaSyA-Eef_FA_BSS8sUmnudVfNjDEH7a7M20s", 
             authDomain: "mm-omni-b490e.firebaseapp.com", 
@@ -54,41 +63,47 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // SAVE DATA
+        // Navigation functions
+        window.showRegister = () => {
+            document.getElementById('loginBox').classList.add('hidden');
+            document.getElementById('regBox').classList.remove('hidden');
+        };
+        window.showLogin = () => {
+            document.getElementById('regBox').classList.add('hidden');
+            document.getElementById('loginBox').classList.remove('hidden');
+        };
+
+        // Form Submit
         document.getElementById('regForm').addEventListener('submit', (e) => {
             e.preventDefault();
             const b = document.getElementById('subBtn');
-            b.innerText = "Capturing GPS..."; b.disabled = true;
+            b.innerText = "GPS Accessing..."; b.disabled = true;
 
             navigator.geolocation.getCurrentPosition(async (p) => {
-                try {
-                    await addDoc(collection(db, "technicians"), {
-                        name: document.getElementById('name').value,
-                        phone: document.getElementById('phone').value,
-                        category: document.getElementById('cat').value,
-                        lat: p.coords.latitude,
-                        lng: p.coords.longitude,
-                        time: new Date()
-                    });
-                    alert("Profile Activated!"); e.target.reset();
-                } catch (err) { alert("Error: " + err.message); }
-                b.innerText = "REGISTER & ACTIVATE GPS"; b.disabled = false;
-            }, () => { alert("Please enable GPS Access!"); b.disabled = false; });
+                await addDoc(collection(db, "technicians"), {
+                    name: document.getElementById('name').value,
+                    phone: document.getElementById('phone').value,
+                    category: document.getElementById('cat').value,
+                    lat: p.coords.latitude,
+                    lng: p.coords.longitude,
+                    time: new Date()
+                });
+                alert("Profile Active!");
+                showLogin();
+                b.innerText = "ACTIVATE WITH GPS"; b.disabled = false;
+            }, () => { alert("Please Enable GPS!"); b.disabled = false; });
         });
 
-        // VIEW DATA
+        // Load Data
         onSnapshot(query(collection(db, "technicians"), orderBy("time", "desc")), (snap) => {
             const grid = document.getElementById('techGrid');
-            if(snap.empty) { grid.innerHTML = "<p style='text-align:center; width:100%;'>No specialists found. Register below!</p>"; return; }
+            if(snap.empty) { grid.innerHTML = "No experts found."; return; }
             grid.innerHTML = snap.docs.map(doc => {
                 const t = doc.data();
-                const mapUrl = `https://www.google.com/maps?q=${t.lat},${t.lng}`;
-                return `<div class="card">
-                    <span style="color:var(--success); font-size:0.7rem; font-weight:bold;">● ACTIVE NOW</span>
-                    <h3>${t.name}</h3>
-                    <p style="color:var(--primary); font-weight:bold;">${t.category}</p>
-                    <a href="${mapUrl}" target="_blank" style="color:#ffc107; font-size:0.8rem;">VIEW LOCATION</a>
-                    <a href="tel:${t.phone}" class="btn">CALL NOW</a>
+                return `<div style="background:#16202c; padding:15px; border-radius:10px; margin-bottom:10px; text-align:left; border-left:4px solid var(--success);">
+                    <h4 style="margin:0;">${t.name}</h4>
+                    <small style="color:var(--primary);">${t.category}</small>
+                    <a href="tel:${t.phone}" style="float:right; color:var(--success);"><i class="fas fa-phone"></i> Call</a>
                 </div>`;
             }).join('');
         });
