@@ -3,110 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MM OMNI | Portal</title>
+    <title>MM OMNI | Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
-        :root { --primary: #007bff; --dark: #0b111a; --success: #28a745; }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        .container { max-width: 500px; margin: 50px auto; padding: 20px; }
-        .box { background: #16202c; padding: 30px; border-radius: 20px; border: 1px solid #333; margin-bottom: 20px; }
-        .btn { display: block; width: 100%; padding: 15px; background: var(--primary); color: white; text-decoration: none; border-radius: 10px; font-weight: bold; border: none; cursor: pointer; margin-top: 10px; }
-        .sec-btn { background: #333; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; background: #0b111a; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
+        :root { --primary: #007bff; --dark: #0b111a; --success: #28a745; --danger: #dc3545; }
+        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        
+        /* Navigation */
+        nav { background: #000; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: white; }
+        .logo span { color: var(--primary); }
+
+        /* General UI */
+        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
+        .card { background: #16202c; padding: 25px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
         .hidden { display: none; }
+
+        /* Buttons & Inputs */
+        .btn { padding: 12px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; text-align: center; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-success { background: var(--success); color: white; width: 100%; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-outline { background: transparent; border: 1px solid #444; color: white; }
+        
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; background: #0b111a; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        input:focus { border-color: var(--primary); outline: none; }
+
+        /* Status Badges */
+        .badge { font-size: 0.7rem; font-weight: bold; color: var(--success); text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="container" id="loginBox">
-        <h1>MM <span>OMNI</span></h1>
-        <p style="color:#888;">Welcome to Professional Portal</p>
-        <div class="box">
-            <button class="btn" onclick="showRegister()">TECHNICIAN REGISTRATION</button>
-            <button class="btn sec-btn" onclick="window.location.reload()">REFRESH DIRECTORY</button>
-        </div>
-        <div id="techGrid">Loading database...</div>
+<nav>
+    <div class="logo">MM <span>OMNI</span></div>
+    <div id="navButtons">
+        <button class="btn btn-outline" onclick="showView('auth')">Technician Login</button>
+    </div>
+</nav>
+
+<div class="container">
+    
+    <div id="view-customer">
+        <h2 style="margin-bottom: 10px;">Find Professional Technicians</h2>
+        <p style="color: #888; margin-bottom: 30px;">Direct access to verified experts in your area.</p>
+        <div id="techList" class="grid">Scanning for specialists...</div>
     </div>
 
-    <div class="container hidden" id="regBox">
-        <h2>Register Profile</h2>
-        <div class="box">
-            <form id="regForm">
-                <input type="text" id="name" placeholder="Full Name" required>
-                <input type="tel" id="phone" placeholder="Mobile Number" required>
-                <select id="cat" required>
-                    <option value="Automobile">Automobile</option>
-                    <option value="Electrical">Electrical</option>
-                    <option value="AC Repair">AC Repair</option>
-                    <option value="ICT Support">ICT Support</option>
-                </select>
-                <button type="submit" class="btn" id="subBtn">ACTIVATE WITH GPS</button>
-                <button type="button" class="btn sec-btn" onclick="showLogin()">BACK TO HOME</button>
-            </form>
+    <div id="view-auth" class="hidden">
+        <div class="card" style="max-width: 400px; margin: 0 auto;">
+            <h2 id="authTitle" style="text-align:center;">Technician Login</h2>
+            <div style="margin-top:20px;">
+                <input type="email" id="email" placeholder="Email Address">
+                <input type="password" id="password" placeholder="Password">
+                <button class="btn btn-primary" style="width:100%;" onclick="handleAuth()" id="authBtn">Login</button>
+                <p id="toggleText" style="text-align:center; margin-top:20px; cursor:pointer; color:var(--primary);" onclick="toggleAuth()">Don't have an account? Register here</p>
+                <button class="btn btn-outline" style="width:100%; margin-top:10px;" onclick="showView('customer')">Cancel</button>
+            </div>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    <div id="view-dashboard" class="hidden">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+            <h2>Your Dashboard</h2>
+            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
+        </div>
+        
+        <div class="card">
+            <h3>Manage Your Profile</h3>
+            <p style="color:#888; font-size:0.9rem; margin-bottom:20px;">Update your details so customers can find you. GPS location is updated when you save.</p>
+            <label>Full Name / Business Name</label>
+            <input type="text" id="dbName" placeholder="Enter your name">
+            <label>Contact Number</label>
+            <input type="tel" id="dbPhone" placeholder="Enter phone number">
+            <label>Service Category</label>
+            <select id="dbCat">
+                <option value="Automobile">Automobile</option>
+                <option value="Electrical">Electrical</option>
+                <option value="AC Repair">AC Repair</option>
+                <option value="ICT & Network">ICT & Network</option>
+                <option value="Plumbing">Plumbing</option>
+            </select>
+            <button class="btn btn-primary" onclick="saveProfile()" id="saveBtn">Save & Update Location</button>
+        </div>
+    </div>
 
-        // මෙතනට ඔයාගේ පින්තූරයේ තිබුණු Config එක හරියටම දාලා තියෙන්නේ
-        const firebaseConfig = { 
-            apiKey: "AIzaSyA-Eef_FA_BSS8sUmnudVfNjDEH7a7M20s", 
-            authDomain: "mm-omni-b490e.firebaseapp.com", 
-            projectId: "mm-omni-b490e", 
-            storageBucket: "mm-omni-b490e.firebasestorage.app", 
-            messagingSenderId: "905893432675", 
-            appId: "1:905893432675:web:0150edbfc62f3ec5849756" 
-        };
+</div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, query } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // Navigation functions
-        window.showRegister = () => {
-            document.getElementById('loginBox').classList.add('hidden');
-            document.getElementById('regBox').classList.remove('hidden');
-        };
-        window.showLogin = () => {
-            document.getElementById('regBox').classList.add('hidden');
-            document.getElementById('loginBox').classList.remove('hidden');
-        };
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyA-Eef_FA_BSS8sUmnudVfNjDEH7a7M20s",
+        authDomain: "mm-omni-b490e.firebaseapp.com",
+        projectId: "mm-omni-b490e",
+        storageBucket: "mm-omni-b490e.firebasestorage.app",
+        messagingSenderId: "905893432675",
+        appId: "1:905893432675:web:0150edbfc62f3ec5849756"
+    };
 
-        // Form Submit
-        document.getElementById('regForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const b = document.getElementById('subBtn');
-            b.innerText = "GPS Accessing..."; b.disabled = true;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
 
-            navigator.geolocation.getCurrentPosition(async (p) => {
-                await addDoc(collection(db, "technicians"), {
-                    name: document.getElementById('name').value,
-                    phone: document.getElementById('phone').value,
-                    category: document.getElementById('cat').value,
-                    lat: p.coords.latitude,
-                    lng: p.coords.longitude,
-                    time: new Date()
-                });
-                alert("Profile Active!");
-                showLogin();
-                b.innerText = "ACTIVATE WITH GPS"; b.disabled = false;
-            }, () => { alert("Please Enable GPS!"); b.disabled = false; });
+    let isLogin = true;
+
+    // View Management
+    window.showView = (viewName) => {
+        ['view-customer', 'view-auth', 'view-dashboard'].forEach(id => {
+            document.getElementById(id).classList.add('hidden');
         });
+        document.getElementById('view-' + viewName).classList.remove('hidden');
+    };
 
-        // Load Data
-        onSnapshot(query(collection(db, "technicians"), orderBy("time", "desc")), (snap) => {
-            const grid = document.getElementById('techGrid');
-            if(snap.empty) { grid.innerHTML = "No experts found."; return; }
-            grid.innerHTML = snap.docs.map(doc => {
-                const t = doc.data();
-                return `<div style="background:#16202c; padding:15px; border-radius:10px; margin-bottom:10px; text-align:left; border-left:4px solid var(--success);">
-                    <h4 style="margin:0;">${t.name}</h4>
-                    <small style="color:var(--primary);">${t.category}</small>
-                    <a href="tel:${t.phone}" style="float:right; color:var(--success);"><i class="fas fa-phone"></i> Call</a>
+    window.toggleAuth = () => {
+        isLogin = !isLogin;
+        document.getElementById('authTitle').innerText = isLogin ? "Technician Login" : "Technician Registration";
+        document.getElementById('authBtn').innerText = isLogin ? "Login" : "Register Now";
+        document.getElementById('toggleText').innerText = isLogin ? "Don't have an account? Register here" : "Already have an account? Login here";
+    };
+
+    // Authentication Logic
+    window.handleAuth = async () => {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
+        const btn = document.getElementById('authBtn');
+
+        if(!email || !pass) return alert("Please fill all fields.");
+        btn.innerText = "Processing..."; btn.disabled = true;
+
+        try {
+            if(isLogin) {
+                await signInWithEmailAndPassword(auth, email, pass);
+            } else {
+                await createUserWithEmailAndPassword(auth, email, pass);
+            }
+        } catch (error) {
+            alert(error.message);
+        }
+        btn.innerText = isLogin ? "Login" : "Register Now"; btn.disabled = false;
+    };
+
+    window.handleLogout = () => signOut(auth);
+
+    // Auth State Listener
+    onAuthStateChanged(auth, async (user) => {
+        const navBtns = document.getElementById('navButtons');
+        if (user) {
+            navBtns.innerHTML = `<button class="btn btn-primary" onclick="showView('dashboard')">My Dashboard</button>`;
+            showView('dashboard');
+            loadDashboardData(user.uid);
+        } else {
+            navBtns.innerHTML = `<button class="btn btn-outline" onclick="showView('auth')">Technician Login</button>`;
+            showView('customer');
+        }
+    });
+
+    // Dashboard Data Loading
+    async function loadDashboardData(uid) {
+        const docRef = doc(db, "technicians", uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('dbName').value = data.name || "";
+            document.getElementById('dbPhone').value = data.phone || "";
+            document.getElementById('dbCat').value = data.category || "Automobile";
+        }
+    }
+
+    // Profile Saving
+    window.saveProfile = () => {
+        const user = auth.currentUser;
+        if(!user) return;
+
+        const btn = document.getElementById('saveBtn');
+        btn.innerText = "Getting GPS..."; btn.disabled = true;
+
+        navigator.geolocation.getCurrentPosition(async (pos) => {
+            try {
+                await setDoc(doc(db, "technicians", user.uid), {
+                    name: document.getElementById('dbName').value,
+                    phone: document.getElementById('dbPhone').value,
+                    category: document.getElementById('dbCat').value,
+                    lat: pos.coords.latitude,
+                    lng: pos.coords.longitude,
+                    uid: user.uid,
+                    lastUpdated: new Date()
+                }, { merge: true });
+                alert("Profile Updated Successfully!");
+            } catch (e) { alert(e.message); }
+            btn.innerText = "Save & Update Location"; btn.disabled = false;
+        }, () => {
+            alert("Please enable location access to update your profile.");
+            btn.disabled = false;
+        });
+    };
+
+    // Live Customer Feed
+    onSnapshot(collection(db, "technicians"), (snap) => {
+        const list = document.getElementById('techList');
+        if(snap.empty) {
+            list.innerHTML = "<p>No active specialists found.</p>";
+            return;
+        }
+        list.innerHTML = snap.docs.map(doc => {
+            const t = doc.data();
+            const mapUrl = `https://www.google.com/maps?q=${t.lat},${t.lng}`;
+            return `
+                <div class="card">
+                    <div class="badge">● Active Now</div>
+                    <h3 style="margin: 10px 0 5px 0;">${t.name || "Unnamed Specialist"}</h3>
+                    <p style="color:var(--primary); font-weight:bold; margin-top:0;">${t.category}</p>
+                    <div style="margin-top:15px; display:flex; gap:10px;">
+                        <a href="tel:${t.phone}" class="btn btn-success"><i class="fas fa-phone-alt"></i> Call</a>
+                        <a href="${mapUrl}" target="_blank" class="btn btn-outline" style="flex-shrink:0;"><i class="fas fa-map-marker-alt"></i> Map</a>
+                    </div>
                 </div>`;
-            }).join('');
-        });
-    </script>
+        }).join('');
+    });
+</script>
+
 </body>
 </html>
