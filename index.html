@@ -3,98 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MM OMNI | Professional Service Hub</title>
+    <title>OMNI SERVICE HUB | Emergency & Technical Support</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/dist/css/all.min.css">
     <style>
-        :root { --primary: #007bff; --dark: #0b111a; --success: #28a745; --danger: #dc3545; }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
+        :root { --primary: #007bff; --dark: rgba(11, 17, 26, 0.95); --success: #28a745; --danger: #ff4d4d; }
         
-        /* Navigation */
-        nav { background: #000; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 1.5rem; font-weight: bold; color: white; letter-spacing: 1px; }
+        body { 
+            background: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; 
+            background-size: cover;
+            color: white; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            overflow-x: hidden; 
+        }
+
+        .overlay { background: rgba(0, 0, 0, 0.75); min-height: 100vh; width: 100%; padding-bottom: 50px; }
+
+        nav { background: #000; padding: 15px 25px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--primary); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 1.6rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; }
         .logo span { color: var(--primary); }
 
-        /* Layout */
-        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
-        .card { background: #16202c; padding: 25px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        .card { background: var(--dark); padding: 25px; border-radius: 15px; border: 1px solid #333; margin-bottom: 20px; backdrop-filter: blur(10px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
         .hidden { display: none; }
 
-        /* UI Elements */
-        .btn { padding: 12px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-block; text-align: center; font-size: 0.9rem; }
+        /* Emergency Section */
+        .emergency-header { color: var(--danger); font-weight: bold; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .emergency-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 40px; }
+        
+        .btn { padding: 12px 20px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-transform: uppercase; font-size: 0.85rem; }
         .btn-primary { background: var(--primary); color: white; width: 100%; }
         .btn-success { background: var(--success); color: white; width: 100%; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-outline { background: transparent; border: 1px solid #444; color: white; }
-        .btn:hover { opacity: 0.8; }
+        .btn-danger { background: var(--danger); color: white; width: 100%; }
+        .btn-outline { background: transparent; border: 1px solid var(--primary); color: var(--primary); }
+        .btn:hover { opacity: 0.8; transform: translateY(-2px); }
         
-        input, select { width: 100%; padding: 12px; margin-bottom: 15px; background: #0b111a; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        .badge { font-size: 0.7rem; font-weight: bold; color: var(--success); text-transform: uppercase; margin-bottom: 5px; display: block; }
-        label { display: block; margin-bottom: 5px; font-size: 0.85rem; color: #888; }
+        .e-box { background: rgba(255, 77, 77, 0.1); border: 1px solid rgba(255, 77, 77, 0.3); padding: 10px; border-radius: 8px; text-align: center; }
+        .e-box small { display: block; font-size: 0.65rem; margin-top: 5px; color: #ccc; letter-spacing: 1px; }
+
+        input, select { width: 100%; padding: 14px; margin-bottom: 15px; background: #0b111a; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
+        label { display: block; margin-bottom: 5px; font-size: 0.8rem; color: #aaa; }
     </style>
 </head>
 <body>
 
-<nav>
-    <div class="logo">MM <span>OMNI</span></div>
-    <div id="navButtons">
-        <button class="btn btn-outline" onclick="showView('auth')">Technician Login</button>
-    </div>
-</nav>
+<div class="overlay">
+    <nav>
+        <div class="logo">OMNI<span>HUB</span></div>
+        <div id="navAction">
+            <button class="btn btn-outline" onclick="showPage('auth')">Technician Login</button>
+        </div>
+    </nav>
 
-<div class="container">
-    
-    <div id="view-customer">
-        <h2 style="margin-bottom: 10px;">Find Professional Technicians</h2>
-        <p style="color: #888; margin-bottom: 30px;">Direct access to verified experts in your area.</p>
-        <div id="techList" class="grid">Searching for active specialists...</div>
-    </div>
+    <div class="container">
 
-    <div id="view-auth" class="hidden">
-        <div class="card" style="max-width: 400px; margin: 0 auto;">
-            <h2 id="authTitle" style="text-align:center;">Technician Login</h2>
-            <div style="margin-top:20px;">
+        <div id="page-customer">
+            <div class="emergency-header">
+                <i class="fas fa-shield-alt"></i> SRI LANKA EMERGENCY HOTLINES
+            </div>
+            <div class="emergency-grid">
+                <div class="e-box">
+                    <a href="tel:119" class="btn btn-danger" style="width:100%">119</a>
+                    <small>POLICE</small>
+                </div>
+                <div class="e-box">
+                    <a href="tel:1990" class="btn btn-danger" style="width:100%; background:#e67e22;">1990</a>
+                    <small>AMBULANCE</small>
+                </div>
+                <div class="e-box">
+                    <a href="tel:110" class="btn btn-danger" style="width:100%">110</a>
+                    <small>FIRE & RESCUE</small>
+                </div>
+            </div>
+
+            <h2 style="margin-bottom: 5px;">Available Technicians</h2>
+            <p style="color: #bbb; margin-bottom: 25px;">Verified local specialists with real-time GPS tracking.</p>
+            
+            <div id="techGrid" class="grid">
+                <p>Connecting to secure server...</p>
+            </div>
+        </div>
+
+        <div id="page-auth" class="hidden">
+            <div class="card" style="max-width: 420px; margin: 40px auto;">
+                <h2 id="authTitle" style="text-align:center; margin-bottom: 25px;">Technician Access</h2>
                 <input type="email" id="email" placeholder="Email Address">
                 <input type="password" id="password" placeholder="Password">
-                <button class="btn btn-primary" onclick="handleAuth()" id="authBtn">Login</button>
-                <p id="toggleText" style="text-align:center; margin-top:20px; cursor:pointer; color:var(--primary);" onclick="toggleAuth()">Don't have an account? Register here</p>
-                <button class="btn btn-outline" style="width:100%; margin-top:10px;" onclick="showView('customer')">Back to Home</button>
+                <button class="btn btn-primary" onclick="handleAuth()" id="authBtn">Login to Portal</button>
+                <p style="text-align:center; margin-top:20px; cursor:pointer; color:var(--primary); font-size: 0.9rem;" onclick="toggleAuth()" id="toggleMsg">Don't have an account? Register Now</p>
+                <button class="btn btn-outline" style="width:100%; margin-top:15px; border-color:#444; color:#aaa;" onclick="showPage('customer')">Return to Directory</button>
+            </div>
+        </div>
+
+        <div id="page-dashboard" class="hidden">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
+                <h2>Technician Dashboard</h2>
+                <button class="btn btn-danger" style="padding: 10px;" onclick="logout()"><i class="fas fa-power-off"></i></button>
+            </div>
+            
+            <div class="card">
+                <h3 style="margin-top:0;"><i class="fas fa-map-marker-alt" style="color:var(--success);"></i> GPS & Profile Settings</h3>
+                <p style="color:#aaa; font-size:0.85rem; margin-bottom:20px;">Updating your profile will broadcast your current GPS location to customers.</p>
+                
+                <label>Professional Name / Business Name</label>
+                <input type="text" id="tName" placeholder="Enter name">
+                
+                <label>Mobile Number (For Customer Calls)</label>
+                <input type="tel" id="tPhone" placeholder="07XXXXXXXX">
+                
+                <label>Expertise Category</label>
+                <select id="tCat">
+                    <option value="Automobile">Automobile Specialist</option>
+                    <option value="Electrical">Electrical & Wiring</option>
+                    <option value="AC/Fridge">AC & Fridge Repair</option>
+                    <option value="ICT/Computer">ICT & Computer Support</option>
+                    <option value="Plumbing">Plumbing Services</option>
+                </select>
+                
+                <button class="btn btn-success" onclick="updateLocation()" id="gpsBtn">UPDATE LOCATION & PROFILE</button>
             </div>
         </div>
     </div>
-
-    <div id="view-dashboard" class="hidden">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-            <h2>Technician Dashboard</h2>
-            <button class="btn btn-danger" onclick="handleLogout()">Logout</button>
-        </div>
-        
-        <div class="card">
-            <h3>Profile Settings</h3>
-            <label>Business / Profile Name</label>
-            <input type="text" id="dbName" placeholder="e.g. Kalpa Repairs">
-            <label>Contact Number</label>
-            <input type="tel" id="dbPhone" placeholder="07X XXXXXXX">
-            <label>Service Category</label>
-            <select id="dbCat">
-                <option value="Automobile">Automobile</option>
-                <option value="Electrical">Electrical</option>
-                <option value="AC Repair">AC Repair</option>
-                <option value="ICT & Network">ICT & Network</option>
-                <option value="Plumbing">Plumbing</option>
-            </select>
-            <button class="btn btn-primary" onclick="saveProfile()" id="saveBtn">Save & Broadcast Location</button>
-        </div>
-    </div>
-
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, getDoc, collection, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
     import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    // Firebase Configuration using your credentials
     const firebaseConfig = {
         apiKey: "AIzaSyAhCnSWjRWP3jKVrYdyZm8ArlUcSsLDbwA",
         authDomain: "mm-omni-hub.firebaseapp.com",
@@ -110,101 +147,88 @@
 
     let isLogin = true;
 
-    // Navigation logic
-    window.showView = (view) => {
-        ['view-customer', 'view-auth', 'view-dashboard'].forEach(id => document.getElementById(id).classList.add('hidden'));
-        document.getElementById('view-' + view).classList.remove('hidden');
+    window.showPage = (p) => {
+        ['page-customer', 'page-auth', 'page-dashboard'].forEach(v => document.getElementById(v).classList.add('hidden'));
+        document.getElementById('page-' + p).classList.remove('hidden');
     };
 
     window.toggleAuth = () => {
         isLogin = !isLogin;
         document.getElementById('authTitle').innerText = isLogin ? "Technician Login" : "Technician Registration";
-        document.getElementById('authBtn').innerText = isLogin ? "Login" : "Register Now";
-        document.getElementById('toggleText').innerText = isLogin ? "Don't have an account? Register here" : "Already have an account? Login here";
+        document.getElementById('authBtn').innerText = isLogin ? "Login to Portal" : "Create Account";
+        document.getElementById('toggleMsg').innerText = isLogin ? "Don't have an account? Register Now" : "Already have an account? Login";
     };
 
-    // Authentication logic
     window.handleAuth = async () => {
         const email = document.getElementById('email').value;
         const pass = document.getElementById('password').value;
-        if(!email || !pass) return alert("Please fill all fields.");
-        
+        if(!email || !pass) return alert("Please fill in all fields.");
         try {
             if(isLogin) await signInWithEmailAndPassword(auth, email, pass);
             else await createUserWithEmailAndPassword(auth, email, pass);
-        } catch (e) { alert(e.message); }
+        } catch (err) { alert(err.message); }
     };
 
-    window.handleLogout = () => signOut(auth);
+    window.logout = () => signOut(auth);
 
-    // Monitor Auth State
     onAuthStateChanged(auth, async (user) => {
-        const navBtns = document.getElementById('navButtons');
         if (user) {
-            navBtns.innerHTML = `<button class="btn btn-outline" onclick="showView('dashboard')">Dashboard</button>`;
-            showView('dashboard');
-            
-            // Load existing profile data
-            const docSnap = await getDoc(doc(db, "technicians", user.uid));
-            if(docSnap.exists()){
-                const data = docSnap.data();
-                document.getElementById('dbName').value = data.name || "";
-                document.getElementById('dbPhone').value = data.phone || "";
-                document.getElementById('dbCat').value = data.category || "Automobile";
+            document.getElementById('navAction').innerHTML = `<button class="btn btn-outline" onclick="showPage('dashboard')">My Dashboard</button>`;
+            showPage('dashboard');
+            const d = await getDoc(doc(db, "technicians", user.uid));
+            if(d.exists()){
+                document.getElementById('tName').value = d.data().name || "";
+                document.getElementById('tPhone').value = d.data().phone || "";
+                document.getElementById('tCat').value = d.data().category || "Automobile";
             }
         } else {
-            navBtns.innerHTML = `<button class="btn btn-outline" onclick="showView('auth')">Technician Login</button>`;
-            showView('customer');
+            document.getElementById('navAction').innerHTML = `<button class="btn btn-outline" onclick="showPage('auth')">Technician Login</button>`;
+            showPage('customer');
         }
     });
 
-    // Profile update logic
-    window.saveProfile = () => {
-        const user = auth.currentUser;
-        if(!user) return;
-
-        const btn = document.getElementById('saveBtn');
-        btn.innerText = "Accessing GPS..."; btn.disabled = true;
-
+    window.updateLocation = () => {
+        const u = auth.currentUser;
+        const b = document.getElementById('gpsBtn');
+        b.innerHTML = "<i class='fas fa-spinner fa-spin'></i> ACCESSING GPS..."; b.disabled = true;
+        
         navigator.geolocation.getCurrentPosition(async (pos) => {
-            try {
-                await setDoc(doc(db, "technicians", user.uid), {
-                    name: document.getElementById('dbName').value,
-                    phone: document.getElementById('dbPhone').value,
-                    category: document.getElementById('dbCat').value,
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude,
-                    uid: user.uid,
-                    timestamp: new Date()
-                }, { merge: true });
-                alert("Profile and Location updated successfully!");
-            } catch (e) { alert(e.message); }
-            btn.innerText = "Save & Broadcast Location"; btn.disabled = false;
+            await setDoc(doc(db, "technicians", u.uid), {
+                name: document.getElementById('tName').value,
+                phone: document.getElementById('tPhone').value,
+                category: document.getElementById('tCat').value,
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude,
+                uid: u.uid,
+                updatedAt: serverTimestamp()
+            }, {merge: true});
+            alert("Success: Profile and GPS Location updated.");
+            b.innerHTML = "UPDATE LOCATION & PROFILE"; b.disabled = false;
         }, (err) => {
-            alert("Please allow location access to be visible to customers.");
-            btn.disabled = false;
+            alert("Error: Please enable GPS location services.");
+            b.innerHTML = "UPDATE LOCATION & PROFILE"; b.disabled = false;
         });
     };
 
-    // Real-time directory sync
     onSnapshot(collection(db, "technicians"), (snap) => {
-        const list = document.getElementById('techList');
-        if(snap.empty) {
-            list.innerHTML = "<p>No active specialists found at the moment.</p>";
-            return;
-        }
-        list.innerHTML = snap.docs.map(doc => {
-            const t = doc.data();
+        const grid = document.getElementById('techGrid');
+        if(snap.empty) { grid.innerHTML = "<p>No active technicians available right now.</p>"; return; }
+        
+        grid.innerHTML = snap.docs.map(doc => {
+            const data = doc.data();
+            const gMap = `https://www.google.com/maps?q=${data.lat},${data.lng}`;
             return `
-                <div class="card">
-                    <span class="badge">● Online</span>
-                    <h3 style="margin: 5px 0;">${t.name || 'Anonymous'}</h3>
-                    <p style="color:var(--primary); font-weight:bold; margin-bottom:15px;">${t.category}</p>
-                    <a href="tel:${t.phone}" class="btn btn-success"><i class="fas fa-phone-alt"></i> Call Specialist</a>
+                <div class="card" style="border-left: 4px solid var(--success);">
+                    <span style="color:var(--success); font-size:0.7rem; font-weight:bold;">● ONLINE</span>
+                    <h3 style="margin:8px 0 2px 0;">${data.name || 'Specialist'}</h3>
+                    <p style="color:var(--primary); font-weight:bold; margin-bottom:15px; font-size:0.9rem;">${data.category}</p>
+                    <div style="display:flex; gap:10px;">
+                        <a href="tel:${data.phone}" class="btn btn-success" style="flex:2;"><i class="fas fa-phone-alt"></i> CALL</a>
+                        <a href="${gMap}" target="_blank" class="btn btn-outline" style="flex:1;"><i class="fas fa-map-marker-alt"></i> MAP</a>
+                    </div>
                 </div>`;
         }).join('');
     });
 </script>
-
 </body>
 </html>
